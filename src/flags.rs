@@ -5,13 +5,15 @@ use clap::{
 pub fn handle_flags()
 {
     let options = App::new("MugSoft Tombala")
+        //{{{ gen_cards arg
         .arg(
             Arg::with_name("gen_cards")
                 .short("-g")
                 .long("--gen-cards")
                 .takes_value(false)
                 .help("generate random cards"),
-        )
+        ) //}}}
+        //{{{ cards arg
         .arg(
             Arg::with_name("cards")
                 .short("-c")
@@ -20,8 +22,9 @@ pub fn handle_flags()
                 .help("cards json")
                 .default_value("./tombala_cards.json")
                 .takes_value(true),
-        )
+        ) //}}}
         .get_matches();
+    //{{{ flag functions
     if options.is_present("gen_cards")
     {
         handle_g_flag();
@@ -30,6 +33,7 @@ pub fn handle_flags()
     {
         handle_c_flag(path);
     }
+    //}}}
 }
 fn handle_c_flag(path: &str) //{{{
 {
