@@ -1,0 +1,9 @@
+[package]
+name = "tombala"
+version = "0.0.0"
+authors = ["nikos <nikos@mugsoft.io>"]
+edition = "2018"
+description = "Mugsoft Tombala Game"
+repository = "keybase://private/nikosefthias/tombala"
+license = "MIT"
+[dependencies]
