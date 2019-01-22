@@ -34,11 +34,7 @@ fn generate_row() -> [u8; 9] //{{{
 } //}}}
 pub fn generate_card() -> Card //{{{
 {
-    Card {
-        r1: generate_row(),
-        r2: generate_row(),
-        r3: generate_row(),
-    }
+    (generate_row(), generate_row(), generate_row())
 } //}}}
 pub fn generate_n_cards(n: u32) -> Vec<Card> //{{{
 {

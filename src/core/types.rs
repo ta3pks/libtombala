@@ -11,10 +11,4 @@ pub struct Game
     c2: Vec<u8>,
     t: Vec<u8>,
 }
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Card
-{
-    pub r1: [u8; 9],
-    pub r2: [u8; 9],
-    pub r3: [u8; 9],
-}
+pub type Card = ([u8; 9], [u8; 9], [u8; 9]);
