@@ -1,3 +1,5 @@
-fn main() {
-    println!("Hello, world!");
+extern crate clap;
+extern crate tombala;
+fn main()
+{
 }
