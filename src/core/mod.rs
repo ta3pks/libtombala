@@ -1,2 +1,2 @@
 pub mod card_generator;
-mod types;
+pub mod types;
