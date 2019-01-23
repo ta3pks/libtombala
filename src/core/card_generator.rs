@@ -86,7 +86,7 @@ mod tests
     #[ignore]
     fn examine_card() //{{{
     {
-        println!("{:?}", generate_card());
+        println!("{:?}", generate_card(12));
     } //}}}
     #[test]
     fn test_GenerateNCards() //{{{
