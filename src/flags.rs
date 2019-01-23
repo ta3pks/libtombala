@@ -2,7 +2,11 @@ use clap::{
     App,
     Arg,
 };
-pub fn handle_flags()
+pub struct FlagData
+{
+    pub cards: Vec<super::core::types::Card>,
+}
+pub fn handle_flags() -> FlagData
 {
     let options = App::new("MugSoft Tombala")
         //{{{ gen_cards arg
@@ -31,22 +35,33 @@ pub fn handle_flags()
     }
     if let Some(path) = options.value_of("cards")
     {
-        handle_c_flag(path);
+        FlagData {
+            cards: handle_c_flag(path),
+        }
+    }
+    else
+    {
+        panic!("cannot read flags");
     }
     //}}}
 }
-fn handle_c_flag(path: &str) //{{{
+fn handle_c_flag(path: &str) -> Vec<super::core::types::Card> //{{{
 {
     let cards = std::fs::read_to_string(path);
     if let Ok(cards) = cards
     {
         let cards = serde_json::from_str::<Vec<super::core::types::Card>>(&cards);
-        println!("{:?}", cards.unwrap());
+        cards.unwrap()
     }
     else if let Err(e) = cards
     {
         eprintln!("Cannot read the cards {}", e);
         std::process::exit(e.raw_os_error().unwrap_or(1));
+    }
+    else
+    {
+        eprintln!("Cannot read the cards ");
+        std::process::exit(1);
     }
 } //}}}
 fn handle_g_flag() //{{{
