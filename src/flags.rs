@@ -53,4 +53,5 @@ fn handle_g_flag() //{{{
 {
     let cards = crate::core::card_generator::generate_n_cards(135);
     let _ = std::fs::write("tombala_cards.json", serde_json::to_string(&cards).unwrap());
+    std::process::exit(0);
 } //}}}

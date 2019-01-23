@@ -32,16 +32,16 @@ fn generate_row() -> [u8; 9] //{{{
     }
     a
 } //}}}
-pub fn generate_card() -> Card //{{{
+pub fn generate_card(id: u32) -> Card //{{{
 {
-    (generate_row(), generate_row(), generate_row())
+    (id, generate_row(), generate_row(), generate_row())
 } //}}}
 pub fn generate_n_cards(n: u32) -> Vec<Card> //{{{
 {
     let mut cards = vec![];
-    for _ in 0..n
+    for i in 0..n
     {
-        cards.push(generate_card())
+        cards.push(generate_card(i))
     }
     cards
 } //}}}
