@@ -4,7 +4,7 @@ use clap::{
 };
 pub struct FlagData
 {
-    pub cards: Vec<super::core::types::Card>,
+    pub card_index: crate::core::types::CardIndex,
 }
 pub fn handle_flags() -> FlagData
 {
@@ -15,16 +15,23 @@ pub fn handle_flags() -> FlagData
                 .short("-g")
                 .long("--gen-cards")
                 .takes_value(false)
-                .help("generate random cards"),
+                .help("generate random cards and index them"),
         ) //}}}
         //{{{ cards arg
         .arg(
             Arg::with_name("cards")
                 .short("-c")
                 .long("--cards")
-                .required_unless("gen_cards")
-                .help("cards json")
-                .default_value("./tombala_cards.json")
+                .help("read indexed cards file")
+                .default_value("indexed_cards.json")
+                .required_unless_one(&["gen_cards", "index"])
+                .takes_value(true),
+        ) //}}}
+        //{{{ index from cards file
+        .arg(
+            Arg::with_name("index")
+                .help("generate index from the cards file and exit")
+                .short("-i")
                 .takes_value(true),
         ) //}}}
         .get_matches();
@@ -33,10 +40,14 @@ pub fn handle_flags() -> FlagData
     {
         handle_g_flag();
     }
-    if let Some(path) = options.value_of("cards")
+    if let Some(path) = options.value_of("index")
+    {
+        handle_i_flag(path);
+    }
+    else if let Some(path) = options.value_of("cards")
     {
         FlagData {
-            cards: handle_c_flag(path),
+            card_index: handle_c_flag(path),
         }
     }
     else
@@ -45,28 +56,27 @@ pub fn handle_flags() -> FlagData
     }
     //}}}
 }
-fn handle_c_flag(path: &str) -> Vec<super::core::types::Card> //{{{
+fn handle_i_flag(path: &str) -> ! //{{{
 {
-    let cards = std::fs::read_to_string(path);
-    if let Ok(cards) = cards
-    {
-        let cards = serde_json::from_str::<Vec<super::core::types::Card>>(&cards);
-        cards.unwrap()
-    }
-    else if let Err(e) = cards
-    {
-        eprintln!("Cannot read the cards {}", e);
-        std::process::exit(e.raw_os_error().unwrap_or(1));
-    }
-    else
-    {
-        eprintln!("Cannot read the cards ");
-        std::process::exit(1);
-    }
+    let cards = std::fs::read_to_string(path).expect("cannot open cards file");
+    let cards = serde_json::from_str(&cards).expect("invalid cards file format");
+    let index = crate::core::game::index_cards(&cards);
+    let _ = std::fs::write(
+        "indexed_cards.json",
+        serde_json::to_string(&index).expect("invalid cards index format"),
+    );
+    std::process::exit(0);
+} //}}}
+fn handle_c_flag(path: &str) -> crate::core::types::CardIndex //{{{
+{
+    let index = std::fs::read_to_string(path).expect("cannot read the cards index file");
+    serde_json::from_str(&index).expect("invalid index file format")
 } //}}}
 fn handle_g_flag() //{{{
 {
     let cards = crate::core::card_generator::generate_n_cards(135);
-    let _ = std::fs::write("tombala_cards.json", serde_json::to_string(&cards).unwrap());
+    let index = crate::core::game::index_cards(&cards);
+    let _ = std::fs::write("cards.json", serde_json::to_string(&cards).unwrap());
+    let _ = std::fs::write("indexed_cards.json", serde_json::to_string(&index).unwrap());
     std::process::exit(0);
 } //}}}
