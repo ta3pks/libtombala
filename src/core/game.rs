@@ -21,6 +21,7 @@ pub fn new_game(game_id: u64, index: CardIndex) -> Game
 }
 pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
 {
+    //{{{
     state.balls.push(num);
     let val = match state.card_index_by_number.get_mut(&num)
     {
@@ -96,22 +97,6 @@ pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
     {
         None
     }
-}
-#[cfg(test)] //{{{
-mod tests
-{
-    use super::*;
-    #[test]
-    fn test_new_ball()
-    {
-        let mut state = new_game(12, vec![]);
-        new_ball(&mut state, 15);
-        assert_eq!(state.balls.len(), 1);
-        assert_eq!(state.balls[0], 15);
-        new_ball(&mut state, 16);
-        assert_eq!(state.balls.len(), 2);
-        assert_eq!(state.balls[1], 16);
-    }
 } //}}}
 pub fn index_cards(cards: &Vec<Card>) -> CardIndex //{{{
 {
@@ -155,4 +140,20 @@ pub fn index_cards(cards: &Vec<Card>) -> CardIndex //{{{
         }); //}}}
     });
     card_index
+} //}}}
+#[cfg(test)] //{{{
+mod tests
+{
+    use super::*;
+    #[test]
+    fn test_new_ball()
+    {
+        let mut state = new_game(12, vec![]);
+        new_ball(&mut state, 15);
+        assert_eq!(state.balls.len(), 1);
+        assert_eq!(state.balls[0], 15);
+        new_ball(&mut state, 16);
+        assert_eq!(state.balls.len(), 2);
+        assert_eq!(state.balls[1], 16);
+    }
 } //}}}
