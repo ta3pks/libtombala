@@ -1,3 +1,7 @@
 /target
 **/*.rs.bk
 tombala_cards.json
+cards.json
+indexed_card.json
+cards.json
+indexed_cards.json
