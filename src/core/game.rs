@@ -10,7 +10,7 @@ use std::collections::{
     HashMap,
     HashSet,
 };
-/// add a new ball if not already added and report back the winning status
+/// create a new game state
 pub fn new_game(game_id: u64, index: CardIndex) -> Game
 {
     Game {
@@ -19,6 +19,7 @@ pub fn new_game(game_id: u64, index: CardIndex) -> Game
         ..Default::default()
     }
 }
+/// add a new ball if not already added and report back the winning status
 pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
 {
     //{{{
