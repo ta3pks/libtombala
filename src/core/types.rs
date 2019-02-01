@@ -6,7 +6,7 @@ pub enum Winning
     C2(Vec<u32>),
     T(Vec<u32>),
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Game
 {
     pub id: u64,
@@ -18,20 +18,20 @@ pub struct Game
     pub card_index_by_number: CardIndex,
 }
 pub type CardIndex = HashMap<u8, Vec<Cardinfo>>; //number to card info
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum Row
 {
     R1,
     R2,
     R3,
 }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Cardinfo
 {
     pub card_id: u32,
     pub row: Row,
 }
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct CardState
 {
     pub r1: u8,
@@ -39,3 +39,5 @@ pub struct CardState
     pub r3: u8,
 }
 pub type Card = (u32, [u8; 9], [u8; 9], [u8; 9]); //(id,row1,row2,row3)
+
+pub type CmdFunc = fn(&[&str], &mut Game) -> (Option<String>, bool);
