@@ -1,12 +1,12 @@
 use std::collections::HashMap;
-#[derive(Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub enum Winning
 {
     C1(Vec<u32>),
     C2(Vec<u32>),
     T(Vec<u32>),
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct Game
 {
     pub id: u64,
