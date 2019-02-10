@@ -38,13 +38,11 @@ fn parse_command(cmd: Command) -> COMMAND
         _ => Error("unknown command".to_string()),
     }
 }
-
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum COMMAND
 {
     NewGame(Option<u32>),
     NewBall(u32),
-    Winning(Vec<u8>),
     Error(String),
 }
 #[derive(Default, Serialize, Deserialize, Debug, Clone)]
@@ -53,6 +51,8 @@ pub struct Command
     pub cmd: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub args: Option<Vec<u32>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub winning: Option<crate::core::types::Winning>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
@@ -66,6 +66,50 @@ impl std::convert::From<Command> for COMMAND
             return COMMAND::Error(c.error.unwrap());
         }
         parse_command(c)
+    }
+}
+
+impl std::convert::From<COMMAND> for Command
+{
+    fn from(c: COMMAND) -> Command
+    {
+        use COMMAND::*;
+        match c
+        {
+            Error(s) =>
+            {
+                Command {
+                    error: Some(s),
+                    ..Default::default()
+                }
+            }
+            NewGame(id) =>
+            {
+                if id.is_some()
+                {
+                    Command {
+                        cmd: "new_game".to_string(),
+                        args: Some(vec![id.unwrap()]),
+                        ..Default::default()
+                    }
+                }
+                else
+                {
+                    Command {
+                        cmd: "new_game".to_string(),
+                        ..Default::default()
+                    }
+                }
+            }
+            NewBall(num) =>
+            {
+                Command {
+                    cmd: "new_ball".to_string(),
+                    args: Some(vec![num]),
+                    ..Default::default()
+                }
+            }
+        }
     }
 }
 
