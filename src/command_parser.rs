@@ -41,8 +41,8 @@ fn parse_command(cmd: Command) -> COMMAND
 #[derive(Debug, Clone)]
 pub enum COMMAND
 {
-    NewGame(Option<u32>),
-    NewBall(u32),
+    NewGame(Option<u64>),
+    NewBall(u64),
     Error(String),
 }
 #[derive(Default, Serialize, Deserialize, Debug, Clone)]
@@ -50,7 +50,7 @@ pub struct Command
 {
     pub cmd: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub args: Option<Vec<u32>>,
+    pub args: Option<Vec<u64>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub winning: Option<crate::core::types::Winning>,
     #[serde(skip_serializing_if = "Option::is_none")]

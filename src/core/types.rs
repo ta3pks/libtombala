@@ -6,16 +6,17 @@ pub enum Winning
     C2(Vec<u32>),
     T(Vec<u32>),
 }
-#[derive(Serialize, Deserialize, Default, Debug, Clone)]
-pub struct Game
+#[derive(Serialize, Default, Debug, Clone)]
+pub struct Game<'a>
 {
     pub id: u64,
     pub c1: Vec<u32>,
     pub c2: Vec<u32>,
     pub t: Vec<u32>,
     pub balls: Vec<u8>,
+    pub initial: bool,
     pub card_state: HashMap<u32, CardState>,
-    pub card_index_by_number: CardIndex,
+    pub card_index_by_number: Option<&'a CardIndex>,
 }
 pub type CardIndex = HashMap<u8, Vec<Cardinfo>>; //number to card info
 #[derive(Debug, Serialize, Deserialize, Clone)]

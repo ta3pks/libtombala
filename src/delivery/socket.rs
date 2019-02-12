@@ -19,7 +19,11 @@ use std::sync::mpsc::{
 };
 pub fn start_server(
     cmd: SyncSender<COMMAND>,
-    msg: Receiver<(COMMAND, bool, Option<crate::core::types::Winning>)>,
+    msg: Receiver<(
+        COMMAND,
+        bool,
+        Result<Option<crate::core::types::Winning>, String>,
+    )>,
 )
 {
     std::fs::remove_file("/tmp/tombala.sock");
@@ -45,7 +49,13 @@ pub fn start_server(
 fn handle_connection(
     c: UnixStream,
     command: Rc<SyncSender<COMMAND>>,
-    msg: Rc<Receiver<(COMMAND, bool, Option<crate::core::types::Winning>)>>,
+    msg: Rc<
+        Receiver<(
+            COMMAND,
+            bool,
+            Result<Option<crate::core::types::Winning>, String>,
+        )>,
+    >,
 )
 {
     const MAX_DATA_LEN: usize = 1024; //max data size in bytes
@@ -99,11 +109,28 @@ fn handle_connection(
             Ok((cmd, terminate,winning)) =>
             {
                 let mut cmd:Command =cmd.into() ;
+                let winning = if winning.is_ok(){
+                    winning.ok().unwrap()
+                }else{
+
+                    println!("err here"); 
+                    serde_json::to_string(&Command{
+                        error:Some(winning.err().unwrap()),
+                        ..Default::default()
+                    }).and_then(|val|{
+                        c.write_all(val.as_bytes());
+                        Ok(())
+                    });
+                    if !terminate{
+                        continue
+                    }
+                    break
+                };
                 cmd.winning=winning;
-                 serde_json::to_string(&cmd).and_then(|val|{
-					 c.write_all(val.as_bytes());
-					 Ok(())
-				});
+                serde_json::to_string(&cmd).and_then(|val|{
+                    c.write_all(val.as_bytes());
+                    Ok(())
+                });
                 if terminate
                 {
                     break;

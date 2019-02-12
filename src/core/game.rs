@@ -11,23 +11,32 @@ use std::collections::{
     HashSet,
 };
 /// create a new game state
-pub fn new_game(game_id: u64, index: CardIndex) -> Game
+pub fn new_game(game_id: u64, index: &CardIndex) -> Game
 {
     Game {
         id: game_id,
-        card_index_by_number: index,
+        card_index_by_number: Some(index),
+        initial: false,
         ..Default::default()
     }
 }
 /// add a new ball if not already added and report back the winning status
-pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
+pub fn add_ball(state: &mut Game, num: u8) -> Result<Option<Winning>, String>
 {
     //{{{
+    if state.t.len() > 0
+    {
+        return Err("game finished".to_string());
+    }
+    else if state.balls.contains(&num)
+    {
+        return Err("ball exists".to_string());
+    }
     state.balls.push(num);
-    let val = match state.card_index_by_number.get_mut(&num)
+    let val = match state.card_index_by_number.unwrap().get(&num)
     {
         Some(val) => val,
-        None => return None,
+        None => return Ok(None),
     };
     let mut winner_cards: HashSet<u32> = HashSet::new();
     let num_row_required_to_win = if state.c1.len() == 0
@@ -44,7 +53,7 @@ pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
     }
     else
     {
-        return Some(Winning::T(state.t.clone()));
+        return Ok(Some(Winning::T(state.t.clone())));
     };
     for card_info in val.iter()
     {
@@ -75,7 +84,7 @@ pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
     }
     if !winner_cards.is_empty()
     {
-        Some(match num_row_required_to_win
+        Ok(Some(match num_row_required_to_win
         {
             0 =>
             {
@@ -92,11 +101,11 @@ pub fn add_ball(state: &mut Game, num: u8) -> Option<Winning>
                 state.t = winner_cards.into_iter().collect();
                 Winning::T(state.t.clone())
             }
-        })
+        }))
     }
     else
     {
-        None
+        Ok(None)
     }
 } //}}}
 pub fn index_cards(cards: &Vec<Card>) -> CardIndex //{{{
