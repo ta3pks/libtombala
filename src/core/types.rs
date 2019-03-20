@@ -1,4 +1,11 @@
-use std::collections::HashMap;
+use serde::{
+    Deserialize,
+    Serialize,
+};
+use std::{
+    collections::HashMap,
+    sync::Arc,
+};
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub enum Winning
 {
@@ -6,8 +13,8 @@ pub enum Winning
     C2(Vec<u32>),
     T(Vec<u32>),
 }
-#[derive(Serialize, Default, Debug, Clone)]
-pub struct Game<'a>
+#[derive(Default, Debug, Clone)]
+pub struct Game
 {
     pub id: u64,
     pub c1: Vec<u32>,
@@ -16,7 +23,7 @@ pub struct Game<'a>
     pub balls: Vec<u8>,
     pub initial: bool,
     pub card_state: HashMap<u32, CardState>,
-    pub card_index_by_number: Option<&'a CardIndex>,
+    pub card_index_by_number: Arc<CardIndex>,
 }
 pub type CardIndex = HashMap<u8, Vec<Cardinfo>>; //number to card info
 #[derive(Debug, Serialize, Deserialize, Clone)]

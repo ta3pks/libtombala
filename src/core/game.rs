@@ -6,16 +6,19 @@ use super::types::{
     Row,
     Winning,
 };
-use std::collections::{
-    HashMap,
-    HashSet,
+use std::{
+    collections::{
+        HashMap,
+        HashSet,
+    },
+    sync::Arc,
 };
 /// create a new game state
-pub fn new_game(game_id: u64, index: &CardIndex) -> Game
+pub fn new_game(game_id: u64, index: Arc<CardIndex>) -> Game
 {
     Game {
         id: game_id,
-        card_index_by_number: Some(index),
+        card_index_by_number: index,
         initial: false,
         ..Default::default()
     }
@@ -33,7 +36,7 @@ pub fn add_ball(state: &mut Game, num: u8) -> Result<Option<Winning>, String>
         return Err("ball exists".to_string());
     }
     state.balls.push(num);
-    let val = match state.card_index_by_number.unwrap().get(&num)
+    let val = match state.card_index_by_number.get(&num)
     {
         Some(val) => val,
         None => return Ok(None),
