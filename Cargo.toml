@@ -1,6 +1,6 @@
 [package]
 name           = "tombala"
-version        = "0.0.0"
+version        = "0.1.0"
 authors        = ["nikos <nikos@mugsoft.io>"]
 edition        = "2018"
 description    = "Mugsoft Tombala Game"
