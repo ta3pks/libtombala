@@ -32,7 +32,7 @@ pub struct Game
 }
 impl Game
 {
-    fn new(game_id: u64, index: CardIndex) -> Arc<RwLock<Game>>
+    pub fn new(game_id: u64, index: CardIndex) -> Arc<RwLock<Game>>
     {
         Arc::new(RwLock::new(Game {
             id: game_id,
@@ -41,7 +41,7 @@ impl Game
         }))
     }
 
-    fn new_game(&mut self) -> u64
+    pub fn new_game(&mut self) -> u64
     {
         self.id += 1;
         self.balls = Vec::new();
@@ -52,7 +52,7 @@ impl Game
         self.id
     }
 
-    fn add_ball(&mut self, num: u8) -> Result<Option<Winning>, String>
+    pub fn add_ball(&mut self, num: u8) -> Result<Option<Winning>, String>
     {
         //{{{
         if self.t.len() > 0
