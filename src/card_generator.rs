@@ -1,9 +1,15 @@
-use super::types::Card;
+use super::types::{
+    Card,
+    CardIndex,
+    Cardinfo,
+    Row,
+};
 use rand::{
     random,
     thread_rng,
     Rng,
 };
+use std::collections::HashMap;
 fn generate_row() -> [u8; 9] //{{{
 {
     let mut a: [u8; 9] = [0; 9];
@@ -44,6 +50,49 @@ pub fn generate_n_cards(n: u32) -> Vec<Card> //{{{
         cards.push(generate_card(i))
     }
     cards
+} //}}}
+pub fn index_cards(cards: &Vec<Card>) -> CardIndex //{{{
+{
+    let mut card_index: CardIndex = HashMap::new();
+    cards.iter().for_each(|card| {
+        //{{{ row 1
+        card.1.iter().for_each(|&num| {
+            if num == 0
+            {
+                return;
+            }
+            let line = card_index.entry(num).or_default();
+            line.push(Cardinfo {
+                card_id: card.0,
+                row: Row::R1,
+            })
+        }); //}}}
+            //{{{ row 2
+        card.2.iter().for_each(|&num| {
+            if num == 0
+            {
+                return;
+            }
+            let line = card_index.entry(num).or_default();
+            line.push(Cardinfo {
+                card_id: card.0,
+                row: Row::R2,
+            })
+        }); //}}}
+            //{{{ row 3
+        card.3.iter().for_each(|&num| {
+            if num == 0
+            {
+                return;
+            }
+            let line = card_index.entry(num).or_default();
+            line.push(Cardinfo {
+                card_id: card.0,
+                row: Row::R3,
+            })
+        }); //}}}
+    });
+    card_index
 } //}}}
 #[cfg(test)] //{{{
 mod tests
@@ -89,6 +138,7 @@ mod tests
         println!("{:?}", generate_card(12));
     } //}}}
     #[test]
+    #[allow(bad_style)]
     fn test_GenerateNCards() //{{{
     {
         assert_eq!(135, generate_n_cards(135).len())

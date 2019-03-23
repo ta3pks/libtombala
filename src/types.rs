@@ -52,9 +52,8 @@ impl Game
         self.id
     }
 
-    pub fn add_ball(&mut self, num: u8) -> Result<Option<Winning>, String>
+    pub fn add_ball(&mut self, num: u8) -> Result<Option<Winning>, String> //{{{
     {
-        //{{{
         if self.t.len() > 0
         {
             return Err("game finished".to_string());
@@ -141,49 +140,6 @@ impl Game
     }
 
     //}}}
-    pub fn index_cards(cards: &Vec<Card>) -> CardIndex //{{{
-    {
-        let mut card_index: CardIndex = HashMap::new();
-        cards.iter().for_each(|card| {
-            //{{{ row 1
-            card.1.iter().for_each(|&num| {
-                if num == 0
-                {
-                    return;
-                }
-                let line = card_index.entry(num).or_default();
-                line.push(Cardinfo {
-                    card_id: card.0,
-                    row: Row::R1,
-                })
-            }); //}}}
-                //{{{ row 2
-            card.2.iter().for_each(|&num| {
-                if num == 0
-                {
-                    return;
-                }
-                let line = card_index.entry(num).or_default();
-                line.push(Cardinfo {
-                    card_id: card.0,
-                    row: Row::R2,
-                })
-            }); //}}}
-                //{{{ row 3
-            card.3.iter().for_each(|&num| {
-                if num == 0
-                {
-                    return;
-                }
-                let line = card_index.entry(num).or_default();
-                line.push(Cardinfo {
-                    card_id: card.0,
-                    row: Row::R3,
-                })
-            }); //}}}
-        });
-        card_index
-    } //}}}
 }
 pub type CardIndex = HashMap<u8, Vec<Cardinfo>>; //number to card info
 #[derive(Debug, Serialize, Deserialize, Clone)]
