@@ -18,6 +18,7 @@ pub enum Winning
     C1(Vec<u32>),
     C2(Vec<u32>),
     T(Vec<u32>),
+    TULUM(Vec<u32>)
 }
 #[derive(Default, Debug, Clone)]
 pub struct Game
@@ -39,6 +40,12 @@ impl Game
             card_index_by_number: index,
             ..Default::default()
         }))
+    }
+
+    pub fn is_tulum(&self)->bool
+    {
+        let (c1,c2,c3)=(&self.c1,&self.c2,&self.t);
+        c1.len()==1&&c2.len()==1&&c3.len()==1&&c1[0]==c2[0]&&c2[0]==c3[0]
     }
 
     pub fn new_game(&mut self) -> u64

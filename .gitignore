@@ -5,3 +5,4 @@ cards.json
 indexed_card.json
 cards.json
 indexed_cards.json
+*.lock
