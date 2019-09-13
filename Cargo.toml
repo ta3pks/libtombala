@@ -1,12 +1,12 @@
 [package]
-name           = "tombala"
-version        = "1.0.0"
+name           = "libtombala"
+version        = "2.0.0"
 authors        = ["nikos <nikos@mugsoft.io>"]
 edition        = "2018"
 description    = "Mugsoft Tombala Game"
 repository     = "keybase://private/nikosefthias/tombala"
 license        = "MIT"
 [dependencies]
-rand           = "0.6"
+rand           = "0.7"
 serde          = {version="1.0",features=["derive"]}
 serde_json     = "1.0"
