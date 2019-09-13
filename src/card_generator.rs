@@ -9,8 +9,24 @@ use rand::{
     thread_rng,
     Rng,
 };
-use std::collections::HashMap;
-fn generate_row() -> [u8; 9] //{{{
+
+use std::collections::{
+    HashMap,
+    HashSet,
+};
+fn get_unique_rand(base: u8, state: &mut HashSet<u8>) -> u8
+{
+    let current = base * 10 + thread_rng().gen_range(1, 9);
+    if state.insert(current)
+    {
+        current
+    }
+    else
+    {
+        get_unique_rand(base, state)
+    }
+}
+fn generate_row(prev_nums: &mut HashSet<u8>) -> [u8; 9] //{{{
 {
     let mut a: [u8; 9] = [0; 9];
     let mut base: u8 = 0; //row base
@@ -28,8 +44,7 @@ fn generate_row() -> [u8; 9] //{{{
         if num_nums < 5
         {
             num_nums += 1;
-            let current = thread_rng().gen_range(1, 9);
-            *i = base * 10 + current;
+            *i = get_unique_rand(base, prev_nums);
             base += 1;
             continue;
         }
@@ -40,7 +55,13 @@ fn generate_row() -> [u8; 9] //{{{
 } //}}}
 pub fn generate_card(id: u32) -> Card //{{{
 {
-    (id, generate_row(), generate_row(), generate_row())
+    let mut row_state = HashSet::new();
+    (
+        id,
+        generate_row(&mut row_state),
+        generate_row(&mut row_state),
+        generate_row(&mut row_state),
+    )
 } //}}}
 pub fn generate_n_cards(n: u32) -> Vec<Card> //{{{
 {
@@ -103,7 +124,7 @@ mod tests
     {
         for _ in 1..1e5 as u32
         {
-            let row = generate_row();
+            let row = generate_row(&mut HashSet::default());
             let mut zeros = 0;
             for &i in row.iter()
             {
@@ -120,7 +141,7 @@ mod tests
     {
         for _ in 1..1e5 as u32
         {
-            let row = generate_row();
+            let row = generate_row(&mut HashSet::default());
             for _ in row.iter()
             {
                 for (i, &v) in row.iter().enumerate()
