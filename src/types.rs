@@ -10,7 +10,7 @@ pub enum Winning {
     T(Vec<u32>),
     TULUM(Vec<u32>),
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Game {
     pub id: u64,
     pub c1: Vec<u32>,
