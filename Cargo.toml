@@ -4,7 +4,7 @@ version        = "2.1.0"
 authors        = ["nikos <nikos@mugsoft.io>"]
 edition        = "2018"
 description    = "Mugsoft Tombala Game"
-repository     = "keybase://private/nikosefthias/tombala"
+repository     = "https://github.com/nikosefthias/libtombala"
 license        = "MIT"
 [dependencies]
 rand           = "0.7"
