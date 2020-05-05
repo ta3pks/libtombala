@@ -10,6 +10,26 @@ pub enum Winning {
     T(Vec<u32>),
     TULUM(Vec<u32>),
 }
+pub type CardIndex = HashMap<u8, Vec<Cardinfo>>; //number to card info
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Row {
+    R1,
+    R2,
+    R3,
+}
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Cardinfo {
+    pub card_id: u32,
+    pub row: Row,
+}
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
+pub struct CardState {
+    pub r1: u8,
+    pub r2: u8,
+    pub r3: u8,
+}
+pub type Card = (u32, [u8; 9], [u8; 9], [u8; 9]); //(id,row1,row2,row3)
+
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Game {
     pub id: u64,
@@ -114,24 +134,3 @@ impl Game {
 
     //}}}
 }
-pub type CardIndex = HashMap<u8, Vec<Cardinfo>>; //number to card info
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub enum Row {
-    R1,
-    R2,
-    R3,
-}
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Cardinfo {
-    pub card_id: u32,
-    pub row: Row,
-}
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct CardState {
-    pub r1: u8,
-    pub r2: u8,
-    pub r3: u8,
-}
-pub type Card = (u32, [u8; 9], [u8; 9], [u8; 9]); //(id,row1,row2,row3)
-
-pub type CmdFunc = fn(&[&str], &mut Game) -> (Option<String>, bool);
