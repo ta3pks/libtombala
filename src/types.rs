@@ -41,12 +41,22 @@ pub struct Game {
     pub card_index_by_number: CardIndex,
 }
 impl Game {
+    #[deprecated(
+        since = "2.3.0",
+        note = "this will be replaced with new_plain in next major release. Use new_plain for now and wrap in Arc and Lock manually"
+    )]
     pub fn new(game_id: u64, index: CardIndex) -> Arc<RwLock<Game>> {
         Arc::new(RwLock::new(Game {
             id: game_id,
             card_index_by_number: index,
             ..Default::default()
         }))
+    }
+    pub fn new_plain(index: CardIndex) -> Game {
+        Game {
+            card_index_by_number: index,
+            ..Default::default()
+        }
     }
     pub fn is_first5_c1(&self) -> bool {
         self.c1.len() > 0 && self.balls.len() == 5
