@@ -3,7 +3,7 @@ use rand::{random, thread_rng, Rng};
 
 use std::collections::{HashMap, HashSet};
 fn get_unique_rand(base: u8, state: &mut HashSet<u8>) -> u8 {
-    let current = base * 10 + thread_rng().gen_range(1, 9);
+    let current = base * 10 + thread_rng().gen_range(1..=9);
     if state.insert(current) {
         current
     } else {
