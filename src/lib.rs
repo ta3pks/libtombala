@@ -51,10 +51,10 @@ fn index_cards(cards: &[Card]) -> CardIndex {
 }
 pub trait TombalaGameState {
     fn new_session(&mut self);
-    fn balls(&self) -> &[u8];
-    fn c1(&self) -> &[u32];
-    fn c2(&self) -> &[u32];
-    fn t(&self) -> &[u32];
+    fn balls(&self) -> Vec<u8>;
+    fn c1(&self) -> Vec<u32>;
+    fn c2(&self) -> Vec<u32>;
+    fn t(&self) -> Vec<u32>;
     fn set_c1(&mut self, c1: &[u32]);
     fn set_c2(&mut self, c2: &[u32]);
     fn set_t(&mut self, t: &[u32]);
