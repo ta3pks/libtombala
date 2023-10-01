@@ -91,7 +91,7 @@ impl<T: TombalaGameState> TombalaGame<T> {
     fn resume_previous_game(&mut self) {
         let balls = self.balls().to_vec();
         for ball in balls {
-            self.new_ball_helper(ball, true).unwrap();
+            self.new_ball_helper(ball, true).ok();
         }
     }
     //if is_restore is true, it will not push the ball to the balls vector just will update internal state
