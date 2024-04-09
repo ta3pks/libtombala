@@ -79,6 +79,9 @@ impl<T: TombalaGameState> DerefMut for TombalaGame<T> {
 }
 
 impl<T: TombalaGameState> TombalaGame<T> {
+    pub fn into_inner(self) -> T {
+        self.state
+    }
     pub fn new(state: T, cards: &[Card]) -> Self {
         let mut s = Self {
             state,
