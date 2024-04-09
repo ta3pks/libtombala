@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashSet,
+    fmt::Debug,
     ops::{Deref, DerefMut},
 };
 mod errors;
@@ -49,7 +50,7 @@ fn index_cards(cards: &[Card]) -> CardIndex {
     });
     card_index
 }
-pub trait TombalaGameState {
+pub trait TombalaGameState: Debug + Clone {
     fn new_session(&mut self);
     fn balls(&self) -> Vec<u8>;
     fn c1(&self) -> Vec<u32>;
@@ -60,7 +61,7 @@ pub trait TombalaGameState {
     fn set_t(&mut self, t: &[u32]);
     fn push_ball(&mut self, num: u8) -> u8;
 }
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct TombalaGame<T: TombalaGameState> {
     state: T,
     card_index: CardIndex,

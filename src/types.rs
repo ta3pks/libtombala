@@ -20,7 +20,7 @@ pub(crate) struct Cardinfo {
     pub card_id: u32,
     pub row: Row,
 }
-#[derive(Default, Serialize, Deserialize, Clone)]
+#[derive(Default, Serialize, Deserialize, Clone, Debug)]
 pub(crate) struct State(pub(crate) HashMap<u32, SingleCardState>); //card id to card state
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub(crate) struct SingleCardState {
