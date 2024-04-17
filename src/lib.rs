@@ -103,7 +103,7 @@ impl<T: TombalaGameState> TombalaGame<T> {
         use errors::Error::*;
         if !self.t().is_empty() {
             return Err(GameFinished);
-        } else if self.balls().contains(&num) {
+        } else if self.balls().contains(&num) && !is_restore {
             return Err(BallExists);
         }
         //actual game not restoring previous game
